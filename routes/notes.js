@@ -9,7 +9,7 @@ const router = express.Router()
  * List notes, paging can be used with page querystring, starts with 0
  * Page size can be changed using size querystring, defaults are in config.json
  */
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   
   try {
     
@@ -64,9 +64,7 @@ router.get('/', async (req, res) => {
       'results': notes
     })
   } catch(err) {
-    return res.status(500)[req.format]({
-      'message': err.message || 'Internal server error'
-    })
+    return next(err)
   }
 })
 
@@ -100,9 +98,7 @@ router.post('/', async (req, res, next) => {
 
     return res[req.format](note)
   } catch(err) {
-    return res.status(500)[req.format]({
-      'message': err.message || 'Internal server error'
-    })
+    return next(err)
   }
 })
 
@@ -128,9 +124,7 @@ router.put('/:noteId', async (req, res, next) => {
 
     return res[req.format](note)
   } catch(err) {
-    return res.status(500)[req.format]({
-      'message': err.message || 'Internal server error'
-    })
+    return next(err)
   }
 })
 
@@ -143,9 +137,7 @@ router.delete('/:noteId', async (req, res, next) => {
     
     return res[req.format]({ 'success': true })
   } catch(err) {
-    return res.status(500)[req.format]({
-      'message': err.message || 'Internal server error'
-    })
+    return next(err)
   }
 })
 
@@ -167,9 +159,7 @@ router.param('noteId', async (req, res, next, id) => {
 
     return next()
   } catch(err) {
-    return res.status(500)[req.format]({
-      'message': err.message || 'Internal server error'
-    })
+    return next(err)
   }
 })
 

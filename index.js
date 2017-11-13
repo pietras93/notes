@@ -49,6 +49,17 @@ app.use('*', (req, res) => {
   })
 })
 
+// Error handler
+app.use((err, req, res) => {
+
+  // Some other logging utility here would be useful
+  console.error(err)
+
+  return res.status(500)[req.format]({
+    'message': err.message || 'Internal server error'
+  })
+})
+
 // Create server
 app.listen(config.port, () => {
   console.log(`Listening @ http://localhost:${config.port}/`)
