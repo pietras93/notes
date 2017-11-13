@@ -51,7 +51,7 @@ router.get('/', async (req, res) => {
       params.offset = (page - 1) * params.limit
     }
     
-    let notes = await models.Notes.findAll(params).then()
+    let notes = await models.Notes.findAll(params)
 
     /**
      * Depeneding on convention this could be done:
@@ -95,8 +95,8 @@ router.post('/', async (req, res, next) => {
       })
     }
 
-    let created = await models.Notes.create(req.body).then()
-    let note = await models.Notes.findById(created.id).then()
+    let created = await models.Notes.create(req.body)
+    let note = await models.Notes.findById(created.id)
 
     return res[req.format](note)
   } catch(err) {
@@ -111,8 +111,20 @@ router.put('/:noteId', async (req, res, next) => {
   
   try {
     
-    let updated = await models.Notes.update(req.body, { where: { id: req.note.id } }).then()
-    let note = await models.Notes.findById(req.note.id).then()
+    if (!(req.body.title || req.body.message)) {
+      return res.status(400)[req.format]({
+        'code': 'E021',
+        'message': 'Note title or message is required'
+      })
+    }
+
+    let body = {
+      'title': req.body.title || req.note.title,
+      'message': req.body.message || req.note.message
+    }
+
+    let updated = await models.Notes.update(body, { where: { id: req.note.id } })
+    let note = await models.Notes.findById(req.note.id)
 
     return res[req.format](note)
   } catch(err) {
@@ -127,7 +139,7 @@ router.delete('/:noteId', async (req, res, next) => {
   
   try {
     
-    await models.Notes.destroy({ where: { id: req.note.id } }).then()
+    await models.Notes.destroy({ where: { id: req.note.id } })
     
     return res[req.format]({ 'success': true })
   } catch(err) {
@@ -142,7 +154,7 @@ router.param('noteId', async (req, res, next, id) => {
   
   try {
     
-    let note = await models.Notes.findById(id).then()
+    let note = await models.Notes.findById(id)
 
     if (!note) {
       return res.status(404)[req.format]({

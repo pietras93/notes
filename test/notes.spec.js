@@ -77,7 +77,6 @@ describe('Notes routes', () => {
         return done()
       })
     })
-
   })
   
   describe('GET', () => {
@@ -171,6 +170,22 @@ describe('Notes routes', () => {
         res.should.have.status(200)
         res.body.should.be.an('object')
         res.body.should.have.property('title').that.is.a('string').equal(testTitle2)
+        
+        return done()
+      })
+    })
+
+    it('it should return error when neither of title and message is present', (done) => {
+      
+      chai.request(server)
+      .put('/v1/notes/1')
+      .send({ 'random': 'qwerty' })
+      .end((err, res) => {
+        
+        res.should.have.status(400)
+        res.body.should.be.an('object')
+        res.body.should.have.property('code').that.is.a('string').equal('E021')
+        res.body.should.have.property('message').that.is.a('string').equal('Note title or message is required')
         
         return done()
       })

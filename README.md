@@ -23,6 +23,7 @@ Other formats requests will be returned with *Unsupported format* message
 - 'E002' - wrong page number
 - 'E011' - **title** field missing
 - 'E012' - **message** field missing
+- 'E021' - at least one of the **title** and **message** fields must be present
 - 'E101' - unsupported format
 
 ## Running

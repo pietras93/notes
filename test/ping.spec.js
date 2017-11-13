@@ -24,34 +24,5 @@ describe('Ping route', () => {
         return done()
       })
     })
-
-    it('it should return jsonp response', (done) => {
-
-      chai.request(server)
-      .get('/v1/ping')
-      .query({ 'format': 'jsonp', 'callback': 'cb' })
-      .end((err, res) => {
-        
-        res.type.should.equal('script/javascript')
-        res.should.have.status(200)
-        
-        return done()
-      })
-    })
-
-    it('it should return unsupported format response', (done) => {
-
-      chai.request(server)
-      .get('/v1/ping')
-      .query({ 'format': 'xml' })
-      .end((err, res) => {
-        
-        res.should.have.status(400)
-        res.body.should.have.property('message').that.is.a('string').equal('Unsupported format')
-        res.body.should.have.property('code').that.is.a('string').equal('E101')
-        
-        return done()
-      })
-    })
   })
 })

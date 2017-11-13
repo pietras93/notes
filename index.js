@@ -40,6 +40,15 @@ app.use((req, res, next) => {
 // Setup routes
 app.use('/v1', routes)
 
+// Unknown routes
+app.use('*', (req, res) => {
+
+  return res.status(404)[req.format]({
+    'code': 404,
+    'message': 'Unknown route'
+  })
+})
+
 // Create server
 app.listen(config.port, () => {
   console.log(`Listening @ http://localhost:${config.port}/`)
